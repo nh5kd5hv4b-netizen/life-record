@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>カレンダー</title>
+  <style>
+    .calendar-header{
+      width:560px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .calendar-header button{
+      width:50px;
+      height:30px; 
+    }
+    table{
+      border-collapse:collapse; 
+    }
+    th{
+      border:1px solid black;
+    }
+    td{
+      width:80px;
+      height:80px;
+      vertical-align:top;
+      border:1px solid black;
+    }
+    .sut{
+      color:rgb(36, 131, 168);
+    }
+    .sun{
+      color:rgb(148, 20, 20);
+    }
+  </style>
+</head>
+<body>
+<div class="calendar-header">
+  <button type="button" onclick="prevMonth()">←</button>
+  <h1 id="calendarTitle"></h1>
+  <button type="button" onclick="nextMonth()">→</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>月</th>
+      <th>火</th>
+      <th>水</th>
+      <th>木</th>
+      <th>金</th>
+      <th class="sut">土</th>
+      <th class="sun">日</th>
+    </tr>
+  </thead>
+  <tbody id="calendarBody">
+  </tbody>
+</table>
+
+<script>
+const today=new Date();
+let displayYear=today.getFullYear();
+let displayMonth=today.getMonth()+1;
+
+function showList(){
+  const year=displayYear;
+  const month=displayMonth;
+
+  const date=new Date(year,month -1,1);
+  const firstDay=date.getDay();
+  const lastDate=new Date(year,month,0);
+  const lastDay=lastDate.getDate();
+  const blankDays=firstDay===0?6:firstDay-1;
+  const weeks=Math.ceil((blankDays+lastDay)/7);
+
+  const calendarTitle=document.getElementById("calendarTitle");
+  calendarTitle.textContent=
+  year+"年"+month+"月";
+  
+  const calendarBody=document.getElementById("calendarBody");
+  calendarBody.textContent="";
+  let day=1;
+  for(let week=1; week<=weeks; week++){
+    const tr=document.createElement("tr");
+    for(let i=1; i<=7; i++){
+      const td=document.createElement("td");
+      if(week==1 && i<=blankDays){
+        td.textContent="";
+      }
+      else if(day<=lastDay){
+        const link=document.createElement("a");
+        link.textContent=day;
+
+        const dateKey=year+"-"+
+        String(month).padStart(2,"0")+"-"+
+        String(day).padStart(2,"0");
+
+        link.href="record.html?date="+dateKey;
+        td.appendChild(link);
+
+        const data=localStorage.getItem(dateKey);
+        if(data){
+          const record=JSON.parse(data);
+          const info=document.createElement("div");
+          info.textContent=
+          "💪"+record.condition+
+          "😊"+record.mood+
+          "\n💤"+record.sleep;
+
+          td.appendChild(info);
+        }       
+        day++;
+      }
+      else{
+        td.textContent="";
+      }
+      tr.appendChild(td);
+    }
+  calendarBody.appendChild(tr);
+  }
+}
+showList();
+
+function prevMonth(){
+  displayMonth--;
+  if(displayMonth<1){
+    displayMonth=12;
+    displayYear--;
+  }
+  showList();
+}
+
+function nextMonth(){
+  displayMonth++;
+  if(displayMonth>12){
+    displayMonth=1;
+    displayYear++;
+  }
+  showList();
+}
+</script>
+</body>
+</html>
