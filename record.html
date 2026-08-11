@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>生活記録</title>
+  <style>
+    .memoArea{
+      width: 200px;
+    }
+    .memoHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .buttonArea{
+      text-align:right;
+    }
+    .emojiArea{
+      width:100%;
+      box-sizing:border-box;
+      display:flex;
+      flex-wrap:wrap;
+    }
+    .emojiArea button{
+      width:40px;
+      height:40px;
+      font-size:24px;
+
+      display:flex;
+      justify-content:center;
+    }
+    #memo{
+      width:100%;
+      box-sizing:border-box;
+      resize:none;
+      padding:5px;
+    }
+    #sleep{
+      width:50px;
+    }
+  </style>
+</head>
+<body>
+<form>
+<p id="date"></p>
+
+<label for="condition">💪</label>
+<select id="condition">
+  <option value="">-</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+</select>
+
+<label for="mood">😊</label>
+<select id="mood">
+  <option value="">-</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+</select>
+
+<label for="sleep">💤</label>
+<input type="number" id="sleep" min="0" max="24" step="0.5" value="6">
+
+<div class="memoArea">
+  <div class="memoHeader">
+    <p>メモ</p>
+    <button type="button" onclick="goBack()">戻る</button>
+  </div>
+
+  <textarea id="memo" rows="5" wrap="off"></textarea>
+
+  <div class="buttonArea">
+  <button type="button" onclick="saveRecord()">保存</button>
+  </div>
+  <br>
+  <div class="emojiArea">
+  <button type="button" onclick="addEmoji('🧺')">🧺</button>
+  <button type="button" onclick="addEmoji('🛒')">🛒</button>
+  <button type="button" onclick="addEmoji('🧹')">🧹</button>
+  <button type="button" onclick="addEmoji('🍽️')">🍽️</button>
+  <button type="button" onclick="addEmoji('📞')">📞</button>
+  <button type="button" onclick="addEmoji('💬')">💬</button>
+  <button type="button" onclick="addEmoji('💧')">💧</button>
+  <button type="button" onclick="addEmoji('🗑️')">🗑️</button>
+  <button type="button" onclick="addEmoji('🎨')">🎨</button>
+  <button type="button" onclick="addEmoji('💻')">💻</button>
+  <button type="button" onclick="addEmoji('🤔')">🤔</button>
+  <button type="button" onclick="addEmoji('💤')">💤</button>
+  <button type="button" onclick="addEmoji('🚶')">🚶</button>
+  <button type="button" onclick="addEmoji('🏥')">🏥</button>
+  <button type="button" onclick="addEmoji('⭐')">⭐</button>
+  </div>
+</div>
+</form>
+
+<script>
+const queryString=location.search;
+  
+const params=new URLSearchParams(queryString);
+const date=params.get("date");
+const dateText=document.getElementById("date");
+dateText.textContent=date;
+
+
+function addEmoji(emoji){
+  const memo=document.getElementById("memo");
+
+  const cursorPosition=memo.selectionStart;
+
+  const beforeText=memo.value.slice(0,cursorPosition);
+  const afterText=memo.value.slice(cursorPosition);
+  memo.value=beforeText+emoji+afterText;
+
+  memo.focus();
+  memo.setSelectionRange(
+    cursorPosition+emoji.length,
+    cursorPosition+emoji.length
+  );
+}
+function saveRecord(){
+  const condition=document.getElementById("condition").value;
+  const mood=document.getElementById("mood").value;
+  const memo=document.getElementById("memo").value;
+  const sleep=document.getElementById("sleep").value;
+
+  const record={
+    date,
+    condition,
+    mood,
+    memo,
+    sleep
+  }
+  const data=JSON.stringify(record);
+  localStorage.setItem(date,data);
+  goBack();
+}
+
+const data=localStorage.getItem(date);
+if(data){
+  const record=JSON.parse(data);
+
+  document.getElementById("condition").value=record.condition;
+  document.getElementById("mood").value=record.mood;
+  document.getElementById("memo").value=record.memo;
+  document.getElementById("sleep").value=record.sleep;
+}
+
+function goBack(){
+  location.href="calendar.html";
+}
+</script>
+
+</body>
+</html>
