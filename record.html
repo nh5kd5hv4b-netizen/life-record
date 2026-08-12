@@ -14,7 +14,9 @@
       align-items:center;
     }
     .buttonArea{
-      text-align:right;
+      display:flex;
+      justify-content:flex-end;
+      margin-top:5px;
     }
     .emojiArea{
       width:100%;
@@ -37,6 +39,10 @@
       resize:none;
       padding:5px;
       font-size:32px;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
     }
     .inputRow{
       display:flex;
@@ -55,15 +61,35 @@
     .sleepButtons{
       display:flex;
       flex-direction:column;
+      gap:5px;
+    }
+    .sleepButtons button{
+        width:30px;
+        height:20px;
+        font-size:18px;
+
+        display:flex;
+        justify-content:center;
+        align-items:center;
     }
     select{
-      font-size:50px;
       height:50px;
+      width:50px;
+      font-size:40px;
     }
     label{
       font-size:50px;
     }
-    
+    button{
+      width: 100px;
+      height: 50px;
+      font-size: 40px;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      line-height:1;
+    }
   </style>
 </head>
 <body>
@@ -136,7 +162,8 @@
   <button type="button" onclick="addEmoji('⭐')">⭐</button>
   </div>
 </div>
-<button type="button" onclick="localStorage.clear()">全データ削除</button>
+<br><br><br><br><br><br>
+<button type="button" onclick="localStorage.clear()">削除</button>
 </form>
 
 <script>
