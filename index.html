@@ -34,6 +34,9 @@
     .sun{
       color:rgb(148, 20, 20);
     }
+    .today{
+      background-color:rgb(185, 245, 165);
+    }
   </style>
 </head>
 <body>
@@ -90,6 +93,14 @@ function showList(){
         td.textContent="";
       }
       else if(day<=lastDay){
+        if(
+          year===today.getFullYear()&&
+          month===today.getMonth()+1&&
+          day===today.getDate()
+        ){
+          td.classList.add("today");
+        }
+        
         const link=document.createElement("a");
         link.textContent=day;
 
